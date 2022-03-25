@@ -34,7 +34,7 @@ blocks_plot(data = NULL, count_col = NULL, bgcolor = "#ffffff", blockcolor = "#3
 Example:
 
 ``` r
-blocks_plot(data = df, count_col = col_5, bgcolor = "#000000", blockcolor = "grey")
+blocks_plot(data = df, count_col = "col_5", bgcolor = "#000000", blockcolor = "grey")
 ```
 
 <a href = "https://github.com/filmicaesthetic/TetrisChart/blob/main/scripts/Tetris%20Plot%20Example.R">See
