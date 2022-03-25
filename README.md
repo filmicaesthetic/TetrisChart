@@ -8,8 +8,8 @@ million sales by manufacturer](outputs/tetrisplotexample.png)
 
 ## Data
 
--   Turns_separated.csv : template used to place Tetris-themed blocks
-    into the chart
+-   <a href = "https://github.com/filmicaesthetic/TetrisChart/blob/main/data/Turns_separated.csv">Turns_separated.csv</a>
+    : template used to place Tetris-themed blocks into the chart
 
 ## Use
 
