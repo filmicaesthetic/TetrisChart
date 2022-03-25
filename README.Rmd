@@ -38,6 +38,8 @@ Example:
 blocks_plot(data = df, count_col = col_5, bgcolor = "#000000", blockcolor = "grey")
 ```
 
+<a href = "https://github.com/filmicaesthetic/TetrisChart/blob/main/scripts/Tetris%20Plot%20Example.R">See full example here</a>
+
 ## Issues
 
 * Currently has trouble outputting with ggsave
