@@ -1,14 +1,14 @@
 #########
-# Generalised code for tetris_plot
+# Generalised code for blocks_plot
 #########
 
 library(ggplot2)
 library(dplyr)
 library(tidyr)
 
-tetris_turns <- function(data) {
-  data$tetris_chart_count <- 1
-  n <- ceiling(sum(data$tetris_chart_count) / 30)
+blocks_turns <- function(data) {
+  data$blocks_chart_count <- 1
+  n <- ceiling(sum(data$blocks_chart_count) / 30)
   
   turns_rep <- turns_sep %>% filter(Turn <= n * 30)
   turns_long_rep <- turns_rep %>% gather(column, blocks, col_1:col_10, factor_key=TRUE) %>% arrange(Turn)
@@ -16,9 +16,9 @@ tetris_turns <- function(data) {
   return(turns_long_rep)
 }
 
-tetris_data <- function(data, x) {
-  data$tetris_chart_count <- 1
-  turns_long_rep <- tetris_turns(data)
+blocks_data <- function(data, x) {
+  data$blocks_chart_count <- 1
+  turns_long_rep <- blocks_turns(data)
   number_df <- data.frame()
   
   block <- 0
@@ -26,7 +26,7 @@ tetris_data <- function(data, x) {
   
   for (i in 1:nrow(data)) {
     
-    for (j in 1:(round(data$tetris_chart_count[i]) * (sum(unique(turns_long_rep$Block) > 0) / sum(unique(turns_long_rep$Turn) > 0))) ) {
+    for (j in 1:(round(data$blocks_chart_count[i]) * (sum(unique(turns_long_rep$Block) > 0) / sum(unique(turns_long_rep$Turn) > 0))) ) {
       turn <- turn + 1
       for (k in 1:sum(turns_sep$Turn == turn)) {
         block <- block + 1
@@ -44,16 +44,16 @@ tetris_data <- function(data, x) {
     }
   }
   
-  tetris <- merge(turns_long_rep, number_df, by = c("Turn", "Block"), all.x = TRUE)
-  tetris <- tetris %>% arrange(column) %>% arrange(Block)
+  tet_df <- merge(turns_long_rep, number_df, by = c("Turn", "Block"), all.x = TRUE)
+  tet_df <- tet_df %>% arrange(column) %>% arrange(Block)
   
-  return(tetris)
+  return(tet_df)
   
 }
 
-tetris_plot <- function(data, count_col, bgcolor = "#ffffff", blockcolor = "#394d6e") {
+blocks_plot <- function(data, count_col, bgcolor = "#ffffff", blockcolor = "#394d6e") {
   
-  tdf <- tetris_data(data, count_col)
+  tdf <- blocks_data(data, count_col)
   
   chart <- ggplot(tdf, aes(fill = as.factor(Turn), y=-blocks, x=as.factor(column))) + 
     geom_col(aes(fill = x, group = Block), 

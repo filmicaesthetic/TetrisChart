@@ -12,10 +12,10 @@ font_add_google("Press Start 2P", "Press Start 2P")
 showtext_auto()
 
 # load
-source("~/tetris_plot/scripts/tetris_plot.R")
+source("scripts/blocks_plot.R")
 
 # load data
-games <- read.csv("~/tetris_plot/data/Games_img.csv", stringsAsFactors=FALSE)
+games <- read.csv("data/Games_img.csv", stringsAsFactors=FALSE)
 
 # tidy games data
 games <- games %>% 
