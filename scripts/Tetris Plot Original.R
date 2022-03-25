@@ -6,14 +6,17 @@
 library(ggplot2)
 library(dplyr)
 library(tidyr)
-library(extrafont)
+library(showtext)
 library(gganimate)
+library(gt)
+
+font_add_google("VT323", "VT323")
+showtext_auto()
 
 # load data
-games <- read.csv("~/TetrisChart/Games.csv", stringsAsFactors=FALSE)
+games <- read.csv("~/TetrisChart/Games_img.csv", stringsAsFactors=FALSE)
 turns <- read.csv("~/TetrisChart/Turns.csv")
 turns_sep <- read.csv("~/TetrisChart/Turns_separated.csv")
-data <- data_full %>% filter(Units.sold >= 10) %>% mutate(Units.sold = Units.sold / 10)
 
 # tidy games data
 games <- games %>% arrange(Initial.release.date)
@@ -66,18 +69,18 @@ tetris_data <- function(data) {
 # format data for plot
 tdf <- tetris_data(games)
 
-test <- merge(turns_long_rep, tdf, by = c("Turn", "Block"), all.x = TRUE)
-test <- test %>% arrange(column) %>% arrange(Block)
+tetris <- merge(turns_long_rep, tdf, by = c("Turn", "Block"), all.x = TRUE)
+tetris <- tetris %>% arrange(column) %>% arrange(Block)
 
-test %>% group_by(column) %>% summarise(count = sum(Turn > 0))
-test$Platform <- toupper(test$Platform)
-test$Firm <- toupper(test$Firm)
+# tetris %>% group_by(column) %>% summarise(count = sum(Turn > 0))
+tetris$Platform <- toupper(tetris$Platform)
+tetris$Firm <- toupper(tetris$Firm)
 
 # manual colour palette
 tetris_pal <- c("#6bd12c", "#cc4c2c", "#8f1b75", "#1a78da", "#ccae2c", "#1ad169", "#2b188f", "#cc203e", "#1ad1c2", "#afd12c", "#38d12c", "#1a3dda", "#cc312c", "#cb20da", "#daa71e", "#1ad1ac", "#cc7e2c")
 
 # create charts
-manufacturer <- ggplot(test, aes(fill = as.factor(Turn), y=-blocks, x=as.factor(column))) + 
+manufacturer <- ggplot(tetris, aes(fill = as.factor(Turn), y=-blocks, x=as.factor(column))) + 
   geom_col(aes(fill = Firm, group = Block), 
            position="stack", 
            color = "#394d6e", 
@@ -103,7 +106,7 @@ manufacturer <- ggplot(test, aes(fill = as.factor(Turn), y=-blocks, x=as.factor(
         axis.text = element_blank(),
         axis.title = element_blank())
 
-platform <- ggplot(test, aes(fill = as.factor(Turn), y=-blocks, x=as.factor(column))) + 
+platform <- ggplot(tetris, aes(fill = as.factor(Turn), y=-blocks, x=as.factor(column))) + 
   geom_col(aes(fill = Platform, group = Block), 
            position="stack", 
            color = "#394d6e", 
@@ -129,7 +132,7 @@ platform <- ggplot(test, aes(fill = as.factor(Turn), y=-blocks, x=as.factor(colu
         axis.text = element_blank(),
         axis.title = element_blank())
 
-release <- ggplot(test, aes(fill = as.factor(Turn), y=-blocks, x=as.factor(column))) + 
+release <- ggplot(tetris, aes(fill = as.factor(Turn), y=-blocks, x=as.factor(column))) + 
   geom_col(aes(fill = as.factor(Release), group = Block), 
            position="stack", 
            color = "#394d6e", 
@@ -163,37 +166,40 @@ manufacturer
 # animated chart 
 
 # create full dataset of NAs 
-test_blank <- test %>% mutate(Platform = NA, Firm = NA, Release = NA, Genre = NA)
+tetris_blank <- tetris %>% mutate(Platform = NA, Firm = NA, Release = NA, Genre = NA)
 
 # create first turn
-test_cpy <- merge(test_blank[,1:4], test %>% filter(Turn <= 1), by = c("Turn", "Block", "column", "blocks"), all.x = TRUE)
-test_cpy$loop <- 1
+tetris_cpy <- merge(tetris_blank[,1:4], tetris %>% filter(Turn <= 1), by = c("Turn", "Block", "column", "blocks"), all.x = TRUE)
+tetris_cpy$loop <- 1
 
 # loop through the rest of the turns
-for (i in 2:max(test_blank$Turn)) {
+for (i in 2:max(tetris_blank$Turn)) {
   
-  test_cpy_x <- merge(test_blank[,1:4], test %>% filter(Turn <= i), by = c("Turn", "Block", "column", "blocks"), all.x = TRUE)
-  test_cpy_x$loop <- i
-  test_cpy <- rbind(test_cpy, test_cpy_x)
+  tetris_cpy_x <- merge(tetris_blank[,1:4], tetris %>% 
+                          filter(Turn <= i), by = c("Turn", "Block", "column", "blocks"), all.x = TRUE)
+  tetris_cpy_x$loop <- i
+  tetris_cpy <- rbind(tetris_cpy, tetris_cpy_x)
 }
 
-p <- ggplot(test_cpy, aes(fill = as.factor(Turn), y=-blocks, x=as.factor(column))) + 
-  geom_col(aes(fill = as.factor(Release), group = Block), 
+tetris_cpy$Genre <- toupper(tetris_cpy$Platform)
+
+p <- ggplot(tetris_cpy, aes(fill = as.factor(Turn), y=-blocks, x=as.factor(column))) + 
+  geom_col(aes(fill = as.factor(Genre), group = Block), 
            position="stack", 
            color = "#394d6e", 
            width = 1, 
            size = 1) +
   scale_fill_manual(values = tetris_pal,na.value="#141822") +
-  ggtitle("BEST-SELLING\nHOME VIDEO GAMES\nOF THE 80'S & 90'S\nBY RELEASE YEAR", subtitle = "Each Tetris block (4 squares) represents one title with over 5 million units sold.") +
-  guides(group = "none", color = "none", fill=guide_legend(title="PLATFORM", ncol=3, byrow=TRUE)) +
+  ggtitle("BEST-SELLING\nHOME VIDEO GAMES\nOF THE 80'S & 90'S\nBY GENRE", subtitle = "Each Tetris block (4 squares) represents one title with over 5 million units sold.") +
+  guides(group = "none", color = "none", fill=guide_legend(title="PLATFORM", ncol=1, byrow=TRUE)) +
   transition_states(loop, wrap = TRUE) +
   labs(caption = "DATA: WIKIPEDIA", color = "#bcc2f4") +
   enter_fly(y_loc = 0) +
   theme(panel.spacing = unit(3, "cm"),
         legend.position = "right",
-        plot.margin = margin(t = 0, r = 200, b = 0, l = 200, unit = "pt"),
+        plot.margin = margin(t = 0, r = 100, b = 0, l = 100, unit = "pt"),
         panel.border = element_rect(linetype = "solid", fill = NA, color = NA, size = 3),
-        plot.title = element_text(family = "Press Start K", color = "#bcc2f4", hjust = 0.5, size = 30, margin = margin(t = 20, b = 10, unit = "pt")),
+        plot.title = element_text(family = "VT323", face = "bold", color = "#bcc2f4", hjust = 0.5, size = 30, margin = margin(t = 20, b = 10, unit = "pt")),
         plot.title.position = "plot",
         plot.subtitle = element_text(size = 16, color = "#bcc2f4", hjust = 0.5),
         plot.caption = element_text(size = 8, color = "#bcc2f4"),
@@ -202,9 +208,10 @@ p <- ggplot(test_cpy, aes(fill = as.factor(Turn), y=-blocks, x=as.factor(column)
         panel.background = element_rect(fill = "#141822"),
         legend.key = element_rect(fill = "#141822"),
         legend.background = element_rect(fill = "#141822"),
-        legend.text = element_text(color = "#bcc2f4", family = "Press Start", size = 15),
+        legend.text = element_text(color = "#bcc2f4", family = "VT323", size = 15),
         panel.grid = element_blank(),
         axis.text = element_blank(),
         axis.title = element_blank())
 
 animate(p, height = 1000, width = 1000, end_pause = 3, detail = 1)
+
