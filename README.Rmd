@@ -1,5 +1,5 @@
 ---
-title: "tetris_plot"
+title: "blocks_plot"
 output: github_document
 ---
 
@@ -7,11 +7,9 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Tetris Chart
-
 A function to create a Tetris-themed plot using ggplot2's geom_col.
 
-![Example of Tetris plot, showing count of video games with over 5 million sales by manufacturer]
+![Example of Tetris plot, showing count of video games with over 5 million sales by manufacturer](outputs/tetrisplotexample.png)
 
 ## Data
 
@@ -20,3 +18,27 @@ A function to create a Tetris-themed plot using ggplot2's geom_col.
 ## Use
 
 This plot format is very limited for practical use, and is best used to count occurrences of factors in very small datasets (<100 rows).
+
+Clone and run <a href="https://github.com/filmicaesthetic/TetrisChart/blob/main/scripts/blocks_plot.R">blocks_plot.R</a> and use blocks_plot() to plot data.
+
+``` {r tetris_plot, message = FALSE, eval = FALSE, warning = FALSE}
+tetris_plot(data = NULL, count_col = NULL, bgcolor = "#ffffff", blockcolor = "#394d6e")
+```
+
+### Arguments
+
+* data : The data to use for the plot
+* count_col : The name of column to plot
+* bgcolor : colour of plot background
+* blockcolor : colour of plot grid lines
+
+Example:
+
+``` {r example, message = FALSE, eval = FALSE, warning = FALSE}
+tetris_plot(data = df, count_col = col_5, bgcolor = "#000000", blockcolor = "grey")
+```
+
+## Issues
+
+* Currently has trouble outputting with ggsave
+

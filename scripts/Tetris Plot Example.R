@@ -1,5 +1,5 @@
 ###########
-# Example Tetris chart
+# Example blocks_plot chart
 ###########
 
 library(dplyr)
@@ -22,7 +22,7 @@ games <- games %>%
   arrange(Initial.release.date) %>%
   rename(Manufacturer = Firm)
 
-tetris_plot(games, "Manufacturer", bgcolor = "#0f0f0f", blockcolor = "#3b3b3b") +
+blocks_plot(games, "Manufacturer", bgcolor = "#0f0f0f", blockcolor = "#3b3b3b") +
   ggtitle("BEST-SELLING\nHOME VIDEO GAMES\nOF THE 80'S & 90'S\nBY RELEASE YEAR", subtitle = "Each Tetris block (4 squares) represents one\ntitle with over 5 million units sold.") +
   scale_fill_manual(values = gameR_cols("blocks"), na.value = "#0f0f0f") +
   theme(text = element_text(family = "Press Start 2P", color = "white"),

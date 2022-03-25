@@ -1,11 +1,6 @@
 #########
-# Generalised code for chart
+# Generalised code for tetris_plot
 #########
-
-###########
-# Create a chart that looks like a game of Tetris
-# using 80s and 90s game sales data
-###########
 
 library(ggplot2)
 library(dplyr)
@@ -20,8 +15,6 @@ tetris_turns <- function(data) {
   
   return(turns_long_rep)
 }
-
-# need to account for the extra loops on turns with additional rows
 
 tetris_data <- function(data, x) {
   data$tetris_chart_count <- 1
@@ -57,9 +50,6 @@ tetris_data <- function(data, x) {
   return(tetris)
   
 }
-
-
-
 
 tetris_plot <- function(data, count_col, bgcolor = "#ffffff", blockcolor = "#394d6e") {
   
