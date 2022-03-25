@@ -22,7 +22,7 @@ This plot format is very limited for practical use, and is best used to count oc
 Clone and run <a href="https://github.com/filmicaesthetic/TetrisChart/blob/main/scripts/blocks_plot.R">blocks_plot.R</a> and use blocks_plot() to plot data.
 
 ``` {r tetris_plot, message = FALSE, eval = FALSE, warning = FALSE}
-tetris_plot(data = NULL, count_col = NULL, bgcolor = "#ffffff", blockcolor = "#394d6e")
+blocks_plot(data = NULL, count_col = NULL, bgcolor = "#ffffff", blockcolor = "#394d6e")
 ```
 
 ### Arguments
@@ -35,7 +35,7 @@ tetris_plot(data = NULL, count_col = NULL, bgcolor = "#ffffff", blockcolor = "#3
 Example:
 
 ``` {r example, message = FALSE, eval = FALSE, warning = FALSE}
-tetris_plot(data = df, count_col = col_5, bgcolor = "#000000", blockcolor = "grey")
+blocks_plot(data = df, count_col = col_5, bgcolor = "#000000", blockcolor = "grey")
 ```
 
 ## Issues

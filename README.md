@@ -1,7 +1,5 @@
-tetris_plot
+blocks_plot
 ================
-
-## Tetris Chart
 
 A function to create a Tetris-themed plot using ggplot2’s geom_col.
 
@@ -19,11 +17,11 @@ This plot format is very limited for practical use, and is best used to
 count occurrences of factors in very small datasets (\<100 rows).
 
 Clone and run
-<a href="https://github.com/filmicaesthetic/TetrisChart/blob/main/scripts/tetris_plot.R">tetris_plot.R</a>
-and use tetris_plot() to plot data.
+<a href="https://github.com/filmicaesthetic/TetrisChart/blob/main/scripts/blocks_plot.R">blocks_plot.R</a>
+and use blocks_plot() to plot data.
 
 ``` r
-tetris_plot(data = NULL, count_col = NULL, bgcolor = "#ffffff", blockcolor = "#394d6e")
+blocks_plot(data = NULL, count_col = NULL, bgcolor = "#ffffff", blockcolor = "#394d6e")
 ```
 
 ### Arguments
@@ -36,7 +34,7 @@ tetris_plot(data = NULL, count_col = NULL, bgcolor = "#ffffff", blockcolor = "#3
 Example:
 
 ``` r
-tetris_plot(data = df, count_col = col_5, bgcolor = "#000000", blockcolor = "grey")
+blocks_plot(data = df, count_col = col_5, bgcolor = "#000000", blockcolor = "grey")
 ```
 
 ## Issues
